@@ -1,0 +1,49 @@
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { BrowserRouter } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import App from './App.jsx'
+import './index.css'
+import { AuthProvider } from './contexts/AuthContext.jsx'
+import { ThemeProvider } from './contexts/ThemeContext.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: true,
+      retry: 1,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    },
+  },
+})
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </BrowserRouter>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </ErrorBoundary>
+  </React.StrictMode>,
+)

@@ -18,7 +18,9 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
 
   if (allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
     // Redirect to appropriate dashboard if user doesn't have permission
-    const redirectPath = user?.role === 'caretaker' 
+    const redirectPath = user?.role === 'admin'
+      ? '/admin/dashboard'
+      : user?.role === 'caretaker' 
       ? '/caretaker/dashboard' 
       : user?.role === 'donor'
       ? '/donor/dashboard'

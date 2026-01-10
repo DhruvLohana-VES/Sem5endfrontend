@@ -16,9 +16,13 @@ export const AuthProvider = ({ children }) => {
     const storedToken = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
     
+    console.log('🔍 Checking stored auth:', { storedToken: !!storedToken, storedUser: !!storedUser });
+    
     if (storedToken && storedUser) {
+      const parsedUser = JSON.parse(storedUser);
       setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      setUser(parsedUser);
+      console.log('✅ Restored auth state for user:', parsedUser.email, 'Role:', parsedUser.role);
     }
     setLoading(false);
   }, []);
@@ -26,7 +30,11 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const data = await authAPI.login({ email, password });
+      console.log('🔐 Login response:', data);
+      
       const { token: newToken, user: newUser } = data;
+      console.log('🔐 Token:', newToken);
+      console.log('🔐 User:', newUser);
       
       setToken(newToken);
       setUser(newUser);
@@ -34,10 +42,14 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(newUser));
       localStorage.setItem('userRole', newUser.role); // For mock API
       
+      console.log('✅ Auth state updated, navigating to dashboard for role:', newUser.role);
+      
       toast.success('Login successful!');
       
       // Navigate based on role
-      if (newUser.role === 'caretaker') {
+      if (newUser.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (newUser.role === 'caretaker') {
         navigate('/caretaker/dashboard');
       } else if (newUser.role === 'donor') {
         navigate('/donor/dashboard');
@@ -47,6 +59,7 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true };
     } catch (error) {
+      console.error('❌ Login error:', error);
       const message = error.response?.data?.message || error.message || 'Login failed';
       toast.error(message);
       return { success: false, message };
@@ -87,6 +100,7 @@ export const AuthProvider = ({ children }) => {
     isPatient: user?.role === 'patient',
     isCaretaker: user?.role === 'caretaker',
     isDonor: user?.role === 'donor',
+    isAdmin: user?.role === 'admin',
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -24,6 +24,9 @@ const DonorRequests = lazy(() => import('./pages/donor/Requests'));
 const DonorDonations = lazy(() => import('./pages/donor/Donations'));
 const DonorProfile = lazy(() => import('./pages/donor/Profile'));
 
+// Admin Pages
+import AdminDashboard from './pages/admin/Dashboard';
+
 // Shared Pages
 import NotificationsPage from './pages/shared/Notifications';
 import NotFound from './pages/NotFound';
@@ -39,6 +42,7 @@ function App() {
 
   const getDashboardRoute = () => {
     if (!user) return '/login';
+    if (user.role === 'admin') return '/admin/dashboard';
     if (user.role === 'caretaker') return '/caretaker/dashboard';
     if (user.role === 'donor') return '/donor/dashboard';
     return '/patient/dashboard';
@@ -122,6 +126,16 @@ function App() {
         element={
           <ProtectedRoute>
             <NotificationsPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Admin Routes */}
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminDashboard />
           </ProtectedRoute>
         }
       />

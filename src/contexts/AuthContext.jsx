@@ -12,7 +12,20 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check for existing authentication on mount
+    // Clear auth data on app load (fresh start every time)
+    const shouldClearAuth = !sessionStorage.getItem('hasLoadedBefore');
+    
+    if (shouldClearAuth) {
+      console.log('🧹 First load - clearing all auth data');
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('userRole');
+      sessionStorage.setItem('hasLoadedBefore', 'true');
+      setLoading(false);
+      return;
+    }
+    
+    // Check for existing authentication only if not first load
     const storedToken = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
     

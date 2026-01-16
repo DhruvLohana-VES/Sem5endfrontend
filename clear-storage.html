@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Storage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 500px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .success {
+            color: green;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            color: #1976d2;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔑 Clear Login Session</h1>
+        <p>Your browser has saved login credentials. Click below to clear them and see the login page.</p>
+        
+        <div class="info">
+            <strong>💡 Why am I seeing this?</strong><br>
+            Your browser automatically logs you in because it saved your session. This tool clears that saved session.
+        </div>
+        
+        <button onclick="clearAndRedirect()">Clear Session & Go to Login</button>
+        
+        <div class="success" id="success" style="display: none;">
+            ✅ Session cleared! Redirecting to login...
+        </div>
+    </div>
+
+    <script>
+        // Auto-clear if URL has ?auto parameter
+        if (window.location.search.includes('auto=true')) {
+            localStorage.clear();
+            sessionStorage.clear();
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 500);
+        }
+
+        function clearAndRedirect() {
+            // Clear all storage
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Show success message
+            document.getElementById('success').style.display = 'block';
+            
+            // Redirect to login after 1 second
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

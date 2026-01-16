@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Layout from '../../components/Layout';
+import AdminLayout from '../../components/AdminLayout';
 import { adminAPI } from '../../services/adminApi';
 import { toast } from 'react-toastify';
 import { Users, Activity, Link, TrendingUp } from 'lucide-react';
@@ -49,16 +49,16 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <Layout>
+      <AdminLayout>
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-xl text-gray-600">Loading admin dashboard...</div>
         </div>
-      </Layout>
+      </AdminLayout>
     );
   }
 
   return (
-    <Layout>
+    <AdminLayout>
       <div className="min-h-screen bg-gray-50 dark:bg-black p-6">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
@@ -212,7 +212,7 @@ const AdminDashboard = () => {
         </div>
         </div>
       </div>
-    </Layout>
+    </AdminLayout>
   );
 };
 
